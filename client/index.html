@@ -5,8 +5,41 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Websocket reports</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const output = document.getElementById("output");
+            const ws = new WebSocket("ws://localhost:8765");
+
+            ws.onopen = function() {
+                output.innerHTML += "Connected to server<br>";
+            };
+
+            ws.onmessage = function(event) {
+                output.innerHTML += "Received message: " + event.data + "<br>";
+            };
+
+            ws.onclose = function() {
+                output.innerHTML += "Disconnected from server<br>";
+            };
+
+            document.getElementById("sendBtn").addEventListener("click", function() {
+                const message = document.getElementById("inputMessage").value;
+                ws.send(message);
+                output.innerHTML += "Sent message: " + message + "<br>";
+                document.getElementById("inputMessage").value = '';
+            });
+
+            document.getElementById("closeBtn").addEventListener("click", function() {
+                ws.close();
+            });
+        });
+    </script>
 </head>
 <body>
-    
+    <h1>WebSocket Client</h1>
+    <input type="text" id="inputMessage" placeholder="Enter your message">
+    <button id="sendBtn">Send</button>
+    <button id="closeBtn">Close Connection</button>
+    <div id="output" style="white-space: pre-wrap;"></div>
 </body>
 </html>
