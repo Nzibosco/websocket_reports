@@ -34,9 +34,11 @@ class Server:
         asyncio.get_event_loop().run_until_complete(start_server)
         asyncio.get_event_loop().run_forever()
 
+
 def setup_logger():
     logging.basicConfig(level=logging.INFO)
     return logging.getLogger('WEBSOCKET SERVER')
+
 
 def main():
     logger = setup_logger()
@@ -44,8 +46,6 @@ def main():
     port = 8765
     address = 'localhost'
     server.run(address, port)
-    # service = MessageService(logger)
-    # print(service.process_client_msg('all categories'))
 
 
 if __name__ == '__main__':
