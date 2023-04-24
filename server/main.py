@@ -1,10 +1,12 @@
 # Main server program to run the websocket application
 import asyncio
 import logging
+import ssl
 
 import websockets
 from websockets.exceptions import ConnectionClosed
 
+from security.ssl_certs import SslContext
 from service.message_service import MessageService
 
 
@@ -29,7 +31,14 @@ class Server:
 
     def run(self, address, port):
         self.logger.info(f'Starting websocket server on port {port}')
-        start_server = websockets.serve(self.handle_client_comm, address, port)
+
+        #ssl_context = SslContext(self.logger).get_context()
+        ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+        ssl_context.load_cert_chain(certfile='server.crt', keyfile='server.key')
+        start_server = websockets.serve(self.handle_client_comm,
+                                        address,
+                                        port,
+                                        ssl=ssl_context)
 
         asyncio.get_event_loop().run_until_complete(start_server)
         asyncio.get_event_loop().run_forever()

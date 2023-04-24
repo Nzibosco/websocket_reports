@@ -1,10 +1,19 @@
 import asyncio
+import ssl
+
 import websockets
 import datetime
 
 async def client():
-    uri = "ws://localhost:8765" # The address the websocket server is running on
-    async with websockets.connect(uri) as websocket:
+    #uri = "ws://localhost:8765" # The address the websocket server is running on
+
+    # Using tls for encryption
+    uri = "wss://localhost:8765"
+    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+    ssl_context.check_hostname = False
+    ssl_context.load_verify_locations('server.crt')
+
+    async with websockets.connect(uri, ssl=ssl_context) as websocket:
         while True:
             message = input("Enter your message (type 'exit' to quit): ")
 

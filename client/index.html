@@ -8,7 +8,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const output = document.getElementById("output");
-            const ws = new WebSocket("ws://localhost:8765");
+            const ws = new WebSocket("wss://localhost:8765");
 
             ws.onopen = function() {
                 output.innerHTML += "Connected to server<br>";
